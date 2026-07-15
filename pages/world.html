@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>World News</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <h2 class="logo">GeoFlood</h2>
+  <ul class="menu">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="news.html">News</a></li>
+    <li><a href="world.html">World</a></li>
+    <li><a href="analysis.html">Analysis</a></li>
+    <li><a href="map.html">Map</a></li>
+    <li><a href="recommendation.html">Recommendation</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
+
+<!-- CONTENT -->
+<section class="news-wrapper">
+    <div class="news-container">
+
+        <h1 class="title">Global Disaster & Climate News 🌍</h1>
+
+        <!-- TEMPAT JS MASUKKAN BERITA -->
+        <div id="news"></div>
+
+    </div>
+</section>
+
+<!-- JS WORLD NEWS -->
+<script src="../js/world.js"></script>
+
+<!-- ACTIVE MENU FIX -->
+<script>
+const currentPage = window.location.pathname.split("/").pop();
+
+document.querySelectorAll(".menu a").forEach(link => {
+    link.classList.toggle("active", link.getAttribute("href") === currentPage);
+});
+</script>
+
+</body>
+</html>

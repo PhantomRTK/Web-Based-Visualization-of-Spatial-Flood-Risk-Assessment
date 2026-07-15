@@ -1,0 +1,3427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Flood Analysis Dashboard</title>
+
+<link rel="stylesheet" href="../css/style.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<style>
+
+
+body{
+
+margin:0;
+
+font-family:Arial,sans-serif;
+
+background:#f4f6f9;
+
+}
+
+
+
+/* NAVBAR */
+
+
+.navbar{
+
+display:grid;
+
+grid-template-columns:1fr auto 1fr;
+
+align-items:center;
+
+background:#1e2a38;
+
+padding:15px 40px;
+
+}
+
+
+
+.logo{
+
+color:white;
+
+margin:0;
+
+}
+
+
+
+.menu{
+
+list-style:none;
+
+display:flex;
+
+gap:25px;
+
+margin:0;
+
+padding:0;
+
+}
+
+
+
+.menu a{
+
+color:white;
+
+text-decoration:none;
+
+font-weight:bold;
+
+}
+
+
+
+/* HEADER */
+
+
+.header{
+
+background:#2c3e50;
+
+color:white;
+
+text-align:center;
+
+padding:20px;
+
+font-size:26px;
+
+font-weight:bold;
+
+}
+
+
+
+
+
+/* MAIN DASHBOARD */
+
+
+.dashboard{
+
+
+display:flex;
+
+flex-direction:column;
+
+gap:60px;
+
+padding:40px;
+
+
+}
+
+
+
+/* EACH ANALYSIS */
+
+
+.analysis-section{
+
+
+display:flex;
+
+flex-direction:row;
+
+gap:40px;
+
+justify-content:center;
+
+align-items:flex-start;
+
+
+}
+
+
+
+
+
+/* CHART CARD */
+
+
+.card{
+
+
+background:white;
+
+width:500px;
+
+padding:30px;
+
+border-radius:15px;
+
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+
+
+}
+
+
+
+.card h2{
+
+
+text-align:center;
+
+color:#1e2a38;
+
+
+}
+
+
+
+canvas{
+
+
+max-height:350px;
+
+
+}
+
+
+
+
+/* INFORMATION CARD */
+
+
+.info-card{
+
+
+background:white;
+
+width:700px;
+
+padding:30px;
+
+border-radius:15px;
+
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+
+line-height:1.7;
+
+
+}
+
+
+
+
+.info-card h2{
+
+
+color:#1e2a38;
+
+margin-top:0;
+
+
+}
+
+
+
+/* TEXT + CLASSIFICATION */
+
+
+.info-layout{
+
+
+display:grid;
+
+grid-template-columns:1fr 260px;
+
+gap:30px;
+
+margin-top:30px;
+
+
+}
+
+
+
+
+
+.info-text{
+
+
+padding-right:20px;
+
+
+}
+
+
+
+
+
+.risk-section{
+
+
+border-left:2px solid #ddd;
+
+padding-left:30px;
+
+
+}
+
+
+
+
+
+.risk-section h3{
+
+
+color:#1e2a38;
+
+margin-top:0;
+
+
+}
+
+
+
+
+
+.risk-list{
+
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+padding:0;
+
+margin-top:25px;
+
+
+}
+
+
+
+
+
+.risk-list li{
+
+
+list-style:none;
+
+display:flex;
+
+align-items:center;
+
+font-size:16px;
+
+font-weight:bold;
+
+
+}
+
+
+
+.risk-list span{
+
+
+display:inline-block;
+
+flex-shrink:0;
+
+
+}
+
+
+
+</style>
+
+
+</head>
+
+
+
+
+<body>
+
+
+
+
+
+<nav class="navbar">
+
+
+<h2 class="logo">
+
+🌊 GeoFlood
+
+</h2>
+
+
+
+
+<ul class="menu">
+
+
+<li><a href="../index.html">Home</a></li>
+
+<li><a href="news.html">News</a></li>
+
+<li><a href="world.html">World</a></li>
+
+<li><a href="analysis.html">Analysis</a></li>
+
+<li><a href="map.html">Map</a></li>
+
+<li><a href="recommendation.html">Recommendation</a></li>
+
+<li><a href="about.html">About</a></li>
+
+
+</ul>
+
+
+</nav>
+
+
+<div class="header">
+
+Flood Risk Analysis
+
+</div>
+
+
+
+<div class="dashboard">
+
+
+
+<!-- ================= FLOOD ANALYSIS ================= -->
+
+
+<div class="analysis-section">
+
+
+
+<div class="card">
+
+
+<h2>
+
+Flood Risk Distribution
+
+</h2>
+
+
+<canvas id="riskChart"></canvas>
+
+
+</div>
+
+
+
+
+<div class="info-card">
+
+
+<h2>
+
+Flood Risk Analysis Summary
+
+</h2>
+
+
+
+
+<div class="info-layout">
+
+
+
+<div class="info-text">
+
+
+
+<p>
+
+The flood risk classification was generated using a weighted
+overlay analysis approach based on environmental factors
+affecting flood occurrence.
+
+</p>
+
+
+
+
+<p>
+
+The analysis classified the study area into five risk categories:
+Very High, High, Moderate, Low, and Very Low.
+
+</p>
+
+
+
+
+
+<p>
+
+The largest area is classified as
+<b>Low Risk (47.38%)</b>, followed by
+<b>Moderate Risk (39.13%)</b>.
+
+</p>
+
+
+
+</div>
+
+
+
+
+<div class="risk-section">
+
+
+<h3>
+
+Risk Classification
+
+</h3>
+
+
+
+
+<ul class="risk-list">
+
+
+
+<li>
+
+<span style="background:#FF0000;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+
+Very High : 0.77%
+
+</li>
+
+
+
+<li>
+
+<span style="background:#FFA500;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+
+High : 12.37%
+
+</li>
+
+
+
+
+<li>
+
+<span style="background:#FFFF00;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+
+Moderate : 39.13%
+
+</li>
+
+
+
+
+<li>
+
+<span style="background:#7CFC00;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+
+Low : 47.38%
+
+</li>
+
+
+
+
+<li>
+
+<span style="background:#00FF00;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+
+Very Low : 0.35%
+
+</li>
+
+
+
+
+</ul>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+<!-- ================= SLOPE ANALYSIS ================= -->
+
+
+
+<div class="analysis-section">
+
+
+
+
+
+<div class="card">
+
+
+<h2>
+
+Slope Classification Distribution
+
+</h2>
+
+
+<canvas id="slopeChart"></canvas>
+
+
+</div>
+
+
+
+
+<div class="info-card">
+
+
+<h2>
+
+Slope Analysis Summary
+
+</h2>
+
+
+
+
+
+<div class="info-layout">
+
+
+
+
+
+<div class="info-text">
+
+
+
+<p>
+
+Slope classification analysis was generated based on the
+reclassification of slope data to identify its influence
+towards flood susceptibility.
+
+</p>
+
+
+
+
+<p>
+
+The slope factor was classified into five risk categories:
+Very High, High, Moderate, Low and Very Low.
+
+</p>
+
+
+
+
+<p>
+
+Based on the result, most of the study area is classified as
+<b>Very Low Risk (99.43%)</b>. This indicates that the slope
+factor has a lower contribution towards flood susceptibility.
+
+</p>
+
+
+
+
+<p>
+
+Gentle slope areas have higher potential for water accumulation,
+while steeper slopes allow faster surface runoff movement.
+
+</p>
+
+
+
+
+</div>
+
+
+
+<div class="risk-section">
+
+
+<h3>
+
+Slope Classification
+
+</h3>
+
+
+
+
+<ul class="risk-list">
+
+
+
+
+
+<li>
+
+<span style="background:#FF0000;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+
+Very High : 0.01%
+
+</li>
+
+
+
+
+<li>
+
+<span style="background:#FFA500;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+
+High : 0.02%
+
+</li>
+
+
+
+
+<li>
+
+<span style="background:#FFFF00;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+
+Moderate : 0.05%
+
+</li>
+
+
+
+
+<li>
+
+<span style="background:#7CFC00;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+
+Low : 0.54%
+
+</li>
+
+
+
+
+<li>
+
+<span style="background:#00FF00;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+
+Very Low : 99.43%
+
+</li>
+
+
+
+</ul>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+</div>
+
+<!-- ================= SOIL TYPE ANALYSIS ================= -->
+
+<div class="analysis-section">
+
+
+<div class="card">
+
+
+<h2>
+Soil Type Distribution
+</h2>
+
+
+<canvas id="soilChart"></canvas>
+
+
+</div>
+
+
+
+
+
+<div class="info-card">
+
+
+<h2>
+Soil Type Analysis Summary
+</h2>
+
+
+
+
+<div class="info-layout">
+
+
+
+<div class="info-text">
+
+
+
+<p>
+Soil type classification was included in the flood susceptibility analysis because soil characteristics influence infiltration capacity and water accumulation.
+</p>
+
+
+
+<p>
+The soil layer was classified into four categories:
+<b>Clay, Fine Texture, Loam and Sand.</b>
+</p>
+
+
+
+
+<p>
+Clay soil has lower infiltration capacity which allows water to accumulate easily, resulting in higher flood susceptibility. Meanwhile, sandy soil allows faster infiltration and reduces flood potential.
+</p>
+
+
+
+
+<p>
+The reclassified soil type layer was used as one of the environmental factors in the weighted overlay analysis.
+</p>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+<div class="risk-section">
+
+
+<h3>
+Soil Classification
+</h3>
+
+
+
+
+
+<ul class="risk-list">
+
+
+<li>
+
+<span style="
+background:#FF0000;
+width:15px;
+height:15px;
+border-radius:50%;
+margin-right:10px;">
+</span>
+
+Clay : 25%
+
+</li>
+
+
+
+<li>
+
+<span style="
+background:#FFA500;
+width:15px;
+height:15px;
+border-radius:50%;
+margin-right:10px;">
+</span>
+
+Fine Texture : 30%
+
+</li>
+
+
+
+<li>
+
+<span style="
+background:#7CFC00;
+width:15px;
+height:15px;
+border-radius:50%;
+margin-right:10px;">
+</span>
+
+Loam : 20%
+
+</li>
+
+
+
+<li>
+
+<span style="
+background:#00FF00;
+width:15px;
+height:15px;
+border-radius:50%;
+margin-right:10px;">
+</span>
+
+Sand : 25%
+
+</li>
+
+
+</ul>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+<!-- ================= DRAINAGE DISTANCE ANALYSIS ================= -->
+
+<div class="analysis-section">
+
+    <div class="card">
+
+        <h2>
+            Drainage Distance Distribution
+        </h2>
+
+        <canvas id="drainageChart"></canvas>
+
+    </div>
+
+    <div class="info-card">
+
+        <h2>
+            Drainage Distance Analysis Summary
+        </h2>
+
+        <div class="info-layout">
+
+            <div class="info-text">
+
+                <p>
+                    Drainage distance was included in the flood susceptibility analysis because areas located nearer to rivers and drainage networks have a greater probability of flooding during heavy rainfall events.
+                </p>
+
+                <p>
+                    The drainage distance layer was classified into five categories:
+                    <b>Very High, High, Moderate, Low and Very Low.</b>
+                </p>
+
+                <p>
+                    Based on the analysis, the largest portion of the study area falls under the
+                    <b>Low Risk (34.72%)</b> category, followed by
+                    <b>Moderate Risk (27.85%)</b>.
+                </p>
+
+                <p>
+                    Areas located very close to drainage channels have higher flood susceptibility, while locations farther from drainage systems generally experience lower flood risk.
+                </p>
+
+            </div>
+
+            <div class="risk-section">
+
+                <h3>
+                    Drainage Classification
+                </h3>
+
+                <ul class="risk-list">
+
+                    <li>
+                        <span style="background:#FF0000;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+                        Very High : 17.89%
+                    </li>
+
+                    <li>
+                        <span style="background:#FFA500;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+                        High : 14.97%
+                    </li>
+
+                    <li>
+                        <span style="background:#FFFF00;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+                        Moderate : 27.85%
+                    </li>
+
+                    <li>
+                        <span style="background:#7CFC00;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+                        Low : 34.72%
+                    </li>
+
+                    <li>
+                        <span style="background:#00FF00;width:15px;height:15px;border-radius:50%;margin-right:10px;"></span>
+                        Very Low : 4.57%
+                    </li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================================= -->
+<!-- DISTRICT ANALYSIS -->
+<!-- ========================================================= -->
+
+<section class="district-analysis">
+
+    <!-- Section Header -->
+    <div class="district-analysis-header">
+        <h1 class="district-title">
+            Flood Risk Analysis by District
+        </h1>
+    </div>
+
+    <!-- District Content Starts Here -->
+
+</section>
+
+<!-- ================================================= -->
+<!-- KLANG DISTRICT -->
+<!-- ================================================= -->
+
+<div class="district-wrapper">
+
+    <h2 class="district-heading">
+        📍 Klang District
+    </h2>
+
+    <!-- ================= OVERVIEW ================= -->
+
+    <div class="district-card overview-card">
+
+        <div class="district-image">
+            <img src="../data/district/klang.png" alt="Klang District">
+        </div>
+
+        <div class="district-content">
+
+            <span class="badge moderate">
+                Moderate Flood Risk
+            </span>
+
+            <h2>Klang District Overview</h2>
+
+            <p>
+                Klang District is located on the western coast of Selangor and is traversed by the Klang River.
+                Extensive urban development, relatively flat topography and its close proximity to major river
+                systems increase the district's susceptibility to flooding, particularly during periods of
+                prolonged or intense rainfall.
+            </p>
+
+            <button class="next-btn" onclick="showFlood(this)">
+                View Flood Risk Analysis →
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FLOOD ANALYSIS ================= -->
+
+    <div class="district-card flood-card">
+
+        <h2 class="analysis-title">
+
+            Flood Risk Analysis - Klang District
+
+        </h2>
+
+        <div class="analysis-layout">
+
+            <!-- ================= LEFT PANEL ================= -->
+
+            <div class="left-panel">
+
+                <div class="summary-card">
+
+                    <h3>📊 Flood Risk Distribution</h3>
+
+                    <!-- IMPORTANT -->
+                    <canvas id="klangChart"></canvas>
+
+                    <div class="summary-info">
+
+    <div class="summary-item">
+
+        <span class="label">
+            Dominant Class
+        </span>
+
+        <span class="value moderate">
+
+            Moderate Risk
+
+        </span>
+
+    </div>
+
+    <div class="summary-item">
+
+        <span class="label">
+            Highest Percentage
+        </span>
+
+        <span class="value">
+
+            88.35%
+
+        </span>
+
+    </div>
+
+    <div class="summary-item">
+
+        <span class="label">
+            Moderate Risk
+        </span>
+
+        <span class="value">
+
+            88.35%
+
+        </span>
+
+    </div>
+
+    <div class="summary-item">
+
+        <span class="label">
+            Low Risk
+        </span>
+
+        <span class="value">
+
+            9.41%
+
+        </span>
+
+    </div>
+
+    <div class="summary-item">
+
+        <span class="label">
+            High Risk
+        </span>
+
+        <span class="value">
+
+            2.24%
+
+        </span>
+
+    </div>
+
+    <div class="summary-item">
+
+        <span class="label">
+            Total Pixels
+        </span>
+
+        <span class="value">
+
+            5440
+
+        </span>
+
+    </div>
+
+</div>
+
+                </div>
+
+            </div>
+
+            <!-- ================= RIGHT PANEL ================= -->
+
+            <div class="right-panel">
+
+                <h3>Description</h3>
+
+                <p>
+
+Based on the GIS Weighted Overlay Analysis, Klang District is predominantly classified as
+<strong>Moderate Flood Risk</strong>, accounting for approximately
+<strong>88.35%</strong> of the total analysed area.
+The remaining area consists of
+<strong>Low Flood Risk (9.41%)</strong> and
+<strong>High Flood Risk (2.24%)</strong>.
+No areas were classified as
+Very Low Flood Risk or Very High Flood Risk.
+
+</p>
+
+<p>
+
+The predominance of Moderate Flood Risk indicates that most parts of Klang District experience a moderate susceptibility to flooding. High Flood Risk zones are mainly concentrated near Sungai Klang and its surrounding river network where low elevation, dense urban development and high rainfall intensity increase flood occurrence. Areas classified as Low Flood Risk are generally located farther from major rivers or on slightly higher terrain.
+
+</p>
+                <h3>Scientific Justification</h3>
+
+                <p>
+
+                    Flood susceptibility was assessed using a GIS Weighted Overlay Analysis by integrating four
+                    major conditioning factors: rainfall, slope, soil type and distance to river. Each factor
+                    was assigned a relative weight according to its contribution to flood occurrence. The
+                    combined weighted values were subsequently classified into five flood susceptibility classes:
+                    Very Low, Low, Moderate, High and Very High Flood Risk. This approach enables a reliable
+                    spatial assessment of flood susceptibility throughout Klang District.
+
+                </p>
+
+                <h3>Evidence</h3>
+
+                <ul class="evidence">
+
+<li>
+
+Moderate Flood Risk is the dominant class, covering approximately
+<strong>88.35%</strong> of Klang District.
+
+</li>
+
+<li>
+
+Low Flood Risk accounts for
+<strong>9.41%</strong> of the analysed area.
+
+</li>
+
+<li>
+
+High Flood Risk represents only
+<strong>2.24%</strong> of the district and is mainly located near Sungai Klang.
+
+</li>
+
+<li>
+
+No Very High Flood Risk or Very Low Flood Risk zones were identified.
+
+</li>
+
+<li>
+
+Flood susceptibility is mainly influenced by rainfall intensity, terrain characteristics, river proximity and urban development.
+
+</li>
+
+</ul>
+
+                <h3>Reference</h3>
+
+                <p>
+
+                    Tehrany, M. S., Pradhan, B., &amp; Jebur, M. N. (2015).
+                    <em>Flood susceptibility mapping using a novel ensemble weights-of-evidence and support vector machine models in GIS.</em>
+                    Journal of Hydrology.
+
+                </p>
+
+                <!-- ================= BUTTONS ================= -->
+
+                <div class="analysis-buttons">
+
+                    <button
+                        class="map-btn"
+                        onclick="openDistrictMap('klang')">
+
+                        🗺 View Flood Risk Map
+
+                    </button>
+
+                    <button
+                        class="back-btn"
+                        onclick="hideFlood(this)">
+
+                        ← Back to Overview
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================================================= -->
+<!-- PETALING -->
+<!-- ================================================= -->
+
+<div class="district-wrapper">
+
+    <h2 class="district-heading">
+        📍 Petaling District
+    </h2>
+
+    <!-- ================= OVERVIEW ================= -->
+
+    <div class="district-card overview-card">
+
+        <div class="district-image">
+            <img src="../data/district/petaling.png" alt="Petaling District">
+        </div>
+
+        <div class="district-content">
+
+            <span class="badge moderate">
+                Moderate Risk
+            </span>
+
+            <h2>Petaling District Overview</h2>
+
+            <p>
+                Petaling District is one of the most urbanised districts in Selangor, encompassing
+                major cities such as Shah Alam, Subang Jaya and Petaling Jaya. Rapid urbanisation,
+                dense residential development and extensive drainage networks contribute to varying
+                levels of flood susceptibility across the district.
+            </p>
+
+            <button class="next-btn" onclick="showFlood(this)">
+                View Flood Risk Analysis →
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FLOOD ANALYSIS ================= -->
+
+    <div class="district-card flood-card">
+
+        <h2 class="analysis-title">
+
+            Flood Risk Analysis - Petaling District
+
+        </h2>
+
+        <div class="analysis-layout">
+
+            <!-- ================= LEFT PANEL ================= -->
+
+            <div class="left-panel">
+
+                <div class="summary-card">
+
+                    <h3>📊 Flood Risk Distribution</h3>
+
+                    <div class="chart-container">
+
+                        <canvas id="petalingChart"></canvas>
+
+                    </div>
+
+                    <div class="summary-info">
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Dominant Class
+                            </span>
+
+                            <span class="value moderate">
+                                Moderate Risk
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Highest Percentage
+                            </span>
+
+                            <span class="value">
+                                96.22%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Low Risk
+                            </span>
+
+                            <span class="value">
+                                3.75%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Very Low Risk
+                            </span>
+
+                            <span class="value">
+                                0.03%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Total Pixels
+                            </span>
+
+                            <span class="value">
+                                2801
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ================= RIGHT PANEL ================= -->
+
+            <div class="right-panel">
+
+                <h3>Description</h3>
+
+                <p>
+
+                    Based on the GIS Weighted Overlay Analysis, Petaling District is predominantly
+                    classified as <strong>Moderate Flood Risk</strong>, accounting for approximately
+                    <strong>96.22%</strong> of the analysed area. Areas classified as
+                    <strong>Low Flood Risk</strong> represent
+                    <strong>3.75%</strong>, while only
+                    <strong>0.03%</strong> falls under the
+                    <strong>Very Low Flood Risk</strong> category. No locations were classified as
+                    High or Very High Flood Risk. These findings indicate that most parts of
+                    Petaling District possess a moderate susceptibility to flooding, mainly due to
+                    urban development, relatively flat terrain, rainfall intensity and proximity to
+                    local drainage systems.
+
+                </p>
+
+                <h3>Scientific Justification</h3>
+
+                <p>
+
+                    Flood susceptibility was assessed using the GIS Weighted Overlay Analysis by
+                    integrating four major conditioning factors: rainfall, slope, soil type and
+                    distance to river. Each factor was assigned a relative weight according to its
+                    contribution to flood occurrence. The combined weighted values were classified
+                    into five flood susceptibility classes: Very Low, Low, Moderate, High and Very
+                    High Flood Risk. This approach provides a scientifically reliable representation
+                    of flood susceptibility across Petaling District.
+
+                </p>
+
+                <h3>Evidence</h3>
+
+                <ul class="evidence">
+
+                    <li>Moderate Flood Risk is the dominant class, covering approximately 96.22% of Petaling District.</li>
+
+                    <li>Low Flood Risk occupies only 3.75% of the analysed area.</li>
+
+                    <li>Very Low Flood Risk accounts for only 0.03% of the district.</li>
+
+                    <li>No High or Very High Flood Risk zones were identified in the GIS analysis.</li>
+
+                    <li>The overall flood susceptibility is primarily influenced by rainfall, terrain, soil characteristics and river proximity.</li>
+
+                </ul>
+
+                <h3>Reference</h3>
+
+                <p>
+
+                    Tehrany, M.S., Pradhan, B. &amp; Jebur, M.N. (2015).
+
+                </p>
+
+                <!-- ================= BUTTON ================= -->
+
+                <div class="analysis-buttons">
+
+                    <button
+                        class="map-btn"
+                        onclick="openDistrictMap('petaling')">
+
+                        🗺 View Flood Risk Map
+
+                    </button>
+
+                    <button
+                        class="back-btn"
+                        onclick="hideFlood(this)">
+
+                        ← Back to Overview
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================================================= -->
+<!-- GOMBAK -->
+<!-- ================================================= -->
+
+<div class="district-wrapper">
+
+    <h2 class="district-heading">
+        📍 Gombak District
+    </h2>
+
+    <!-- ================= OVERVIEW ================= -->
+
+    <div class="district-card overview-card">
+
+        <div class="district-image">
+            <img src="../data/district/gombak.png" alt="Gombak District">
+        </div>
+
+        <div class="district-content">
+
+            <span class="badge moderate">
+                Moderate Risk
+            </span>
+
+            <h2>Gombak District Overview</h2>
+
+            <p>
+                Gombak District is situated in the northern part of Selangor and consists of
+                rapidly developing urban areas together with hilly terrain. The combination of
+                urban expansion, rainfall intensity and river systems contributes to varying
+                levels of flood susceptibility throughout the district.
+            </p>
+
+            <button class="next-btn" onclick="showFlood(this)">
+                View Flood Risk Analysis →
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FLOOD ANALYSIS ================= -->
+
+    <div class="district-card flood-card">
+
+        <h2 class="analysis-title">
+
+            Flood Risk Analysis - Gombak District
+
+        </h2>
+
+        <div class="analysis-layout">
+
+            <!-- LEFT PANEL -->
+
+            <div class="left-panel">
+
+                <div class="summary-card">
+
+                    <h3>📊 Flood Risk Distribution</h3>
+
+                    <div class="chart-container">
+
+                        <canvas id="gombakChart"></canvas>
+
+                    </div>
+
+                    <div class="summary-info">
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Dominant Class
+                            </span>
+
+                            <span class="value moderate">
+                                Moderate Risk
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Highest Percentage
+                            </span>
+
+                            <span class="value">
+                                96.65%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Low Risk
+                            </span>
+
+                            <span class="value">
+                                2.18%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                High Risk
+                            </span>
+
+                            <span class="value">
+                                0.85%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Very High Risk
+                            </span>
+
+                            <span class="value">
+                                0.32%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Total Pixels
+                            </span>
+
+                            <span class="value">
+                                8156
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT PANEL -->
+
+            <div class="right-panel">
+
+                <h3>Description</h3>
+
+                <p>
+
+                    Based on the GIS Weighted Overlay Analysis, Gombak District is predominantly
+                    classified as <strong>Moderate Flood Risk</strong>, representing approximately
+                    <strong>96.65%</strong> of the analysed area. Areas classified as
+                    <strong>Low Flood Risk</strong> account for
+                    <strong>2.18%</strong>, while
+                    <strong>High Flood Risk</strong> and
+                    <strong>Very High Flood Risk</strong> contribute
+                    <strong>0.85%</strong> and
+                    <strong>0.32%</strong>, respectively.
+                    No areas were classified as Very Low Flood Risk. Overall, the GIS analysis
+                    indicates that most parts of Gombak District exhibit moderate flood
+                    susceptibility, influenced by rainfall distribution, terrain conditions,
+                    soil characteristics and proximity to river networks.
+
+                </p>
+
+                <h3>Scientific Justification</h3>
+
+                <p>
+
+                    Flood susceptibility was evaluated using the GIS Weighted Overlay Analysis by
+                    integrating rainfall, slope, soil type and distance to river. Each factor was
+                    assigned an appropriate weight according to its contribution to flood
+                    occurrence. The combined weighted values were subsequently classified into
+                    five flood susceptibility classes ranging from Very Low to Very High Flood
+                    Risk. This method provides a scientifically reliable representation of
+                    spatial flood susceptibility across Gombak District.
+
+                </p>
+
+                <h3>Evidence</h3>
+
+                <ul class="evidence">
+
+                    <li>Moderate Flood Risk is the dominant class, covering approximately 96.65% of Gombak District.</li>
+
+                    <li>Low Flood Risk accounts for 2.18% of the analysed area.</li>
+
+                    <li>High Flood Risk occupies only 0.85% of the district.</li>
+
+                    <li>Very High Flood Risk is limited to 0.32% of the analysed area.</li>
+
+                    <li>No Very Low Flood Risk areas were identified in the GIS analysis.</li>
+
+                </ul>
+
+                <h3>Reference</h3>
+
+                <p>
+
+                    Tehrany, M.S., Pradhan, B. &amp; Jebur, M.N. (2015).
+
+                </p>
+
+                <div class="analysis-buttons">
+
+                    <button
+                        class="map-btn"
+                        onclick="openDistrictMap('gombak')">
+
+                        🗺 View Flood Risk Map
+
+                    </button>
+
+                    <button
+                        class="back-btn"
+                        onclick="hideFlood(this)">
+
+                        ← Back to Overview
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================================================= -->
+<!-- HULU LANGAT -->
+<!-- ================================================= -->
+
+<div class="district-wrapper">
+
+    <h2 class="district-heading">
+        📍 Hulu Langat District
+    </h2>
+
+    <!-- ================= OVERVIEW ================= -->
+
+    <div class="district-card overview-card">
+
+        <div class="district-image">
+            <img src="../data/district/hulu_langat.png" alt="Hulu Langat District">
+        </div>
+
+        <div class="district-content">
+
+            <span class="badge moderate">
+                Moderate Risk
+            </span>
+
+            <h2>Hulu Langat District Overview</h2>
+
+            <p>
+                Hulu Langat District is situated in the eastern part of Selangor and
+                consists of rapidly developing urban centres, residential areas and
+                extensive river networks. Increasing urbanisation, seasonal heavy
+                rainfall and river proximity contribute to flood susceptibility in
+                several parts of the district.
+            </p>
+
+            <button class="next-btn" onclick="showFlood(this)">
+                View Flood Risk Analysis →
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FLOOD ANALYSIS ================= -->
+
+    <div class="district-card flood-card">
+
+        <h2 class="analysis-title">
+
+            Flood Risk Analysis - Hulu Langat District
+
+        </h2>
+
+        <div class="analysis-layout">
+
+            <!-- LEFT PANEL -->
+
+            <div class="left-panel">
+
+                <div class="summary-card">
+
+                    <h3>📊 Flood Risk Distribution</h3>
+
+                    <div class="chart-container">
+
+                        <canvas id="huluLangatChart"></canvas>
+
+                    </div>
+
+                    <div class="summary-info">
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Dominant Class
+                            </span>
+
+                            <span class="value moderate">
+                                Moderate Risk
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Highest Percentage
+                            </span>
+
+                            <span class="value">
+                                91.48%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Low Risk
+                            </span>
+
+                            <span class="value">
+                                7.06%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                High Risk
+                            </span>
+
+                            <span class="value">
+                                1.46%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Total Pixels
+                            </span>
+
+                            <span class="value">
+                                10579
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT PANEL -->
+
+            <div class="right-panel">
+
+                <h3>Description</h3>
+
+                <p>
+                    Based on the GIS Weighted Overlay Analysis, Hulu Langat District is
+                    predominantly classified as <strong>Moderate Flood Risk</strong>,
+                    accounting for approximately <strong>91.48%</strong> of the total
+                    analysed area. Areas classified as
+                    <strong>Low Flood Risk</strong> represent
+                    <strong>7.06%</strong>, while
+                    <strong>High Flood Risk</strong> accounts for
+                    <strong>1.46%</strong> of the district.
+                    No areas were classified as Very High or Very Low Flood Risk.
+
+                    The predominance of Moderate Flood Risk reflects the influence of
+                    urban development, moderate terrain conditions and extensive river
+                    systems throughout Hulu Langat. Higher flood susceptibility mainly
+                    occurs in areas located close to river corridors where rainfall
+                    accumulation and river proximity significantly increase flood
+                    occurrence.
+                </p>
+
+                <h3>Scientific Justification</h3>
+
+                <p>
+                    Flood susceptibility was assessed using a GIS Weighted Overlay
+                    Analysis by integrating four conditioning factors: rainfall,
+                    slope, soil type and distance to river. Each factor was assigned
+                    an appropriate weight according to its contribution to flood
+                    occurrence.
+
+                    The combined weighted values were subsequently classified into
+                    five flood susceptibility classes: Very Low, Low, Moderate,
+                    High and Very High Flood Risk. This GIS-based approach provides
+                    a reliable representation of spatial flood susceptibility and
+                    supports effective flood risk management within Hulu Langat
+                    District.
+                </p>
+
+                <h3>Evidence</h3>
+
+                <ul class="evidence">
+
+                    <li>
+                        Moderate Flood Risk is the dominant class, covering
+                        approximately 91.48% of Hulu Langat District.
+                    </li>
+
+                    <li>
+                        Low Flood Risk represents 7.06% of the district and is
+                        generally located in areas with relatively favourable
+                        topography.
+                    </li>
+
+                    <li>
+                        High Flood Risk occupies only 1.46% and is mainly
+                        concentrated near river corridors and flood-prone
+                        settlements.
+                    </li>
+
+                    <li>
+                        No Very High Flood Risk or Very Low Flood Risk zones
+                        were identified within the district.
+                    </li>
+
+                    <li>
+                        The GIS Weighted Overlay Analysis effectively identifies
+                        spatial variations of flood susceptibility across Hulu
+                        Langat District.
+                    </li>
+
+                </ul>
+
+                <h3>Reference</h3>
+
+                <p>
+                    Tehrany, M.S., Pradhan, B. &amp; Jebur, M.N. (2015).
+                    Flood susceptibility mapping using GIS-based multi-criteria
+                    decision analysis and weighted overlay techniques.
+                </p>
+
+                <!-- BUTTONS -->
+
+                <div class="analysis-buttons">
+
+                    <button
+                        class="map-btn"
+                        onclick="openDistrictMap('hulu_langat')">
+
+                        🗺 View Flood Risk Map
+
+                    </button>
+
+                    <button
+                        class="back-btn"
+                        onclick="hideFlood(this)">
+
+                        ← Back to Overview
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================================================= -->
+<!-- HULU SELANGOR -->
+<!-- ================================================= -->
+
+<div class="district-wrapper">
+
+    <h2 class="district-heading">
+        📍 Hulu Selangor District
+    </h2>
+
+    <!-- ================= OVERVIEW ================= -->
+
+    <div class="district-card overview-card">
+
+        <div class="district-image">
+            <img src="../data/district/hulu_selangor.png" alt="Hulu Selangor District">
+        </div>
+
+        <div class="district-content">
+
+            <span class="badge moderate">
+                Moderate Risk
+            </span>
+
+            <h2>Hulu Selangor District Overview</h2>
+
+            <p>
+                Hulu Selangor District is located in the northern part of Selangor
+                and consists of mountainous terrain, agricultural land, forests and
+                growing residential developments. Although much of the district is
+                characterised by moderate flood susceptibility, flood-prone areas
+                remain concentrated along major river systems and low-lying valleys.
+            </p>
+
+            <button class="next-btn" onclick="showFlood(this)">
+                View Flood Risk Analysis →
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FLOOD ANALYSIS ================= -->
+
+    <div class="district-card flood-card">
+
+        <h2 class="analysis-title">
+
+            Flood Risk Analysis - Hulu Selangor District
+
+        </h2>
+
+        <div class="analysis-layout">
+
+            <!-- LEFT PANEL -->
+
+            <div class="left-panel">
+
+                <div class="summary-card">
+
+                    <h3>📊 Flood Risk Distribution</h3>
+
+                    <div class="chart-container">
+
+                        <canvas id="huluSelangorChart"></canvas>
+
+                    </div>
+
+                    <div class="summary-info">
+
+                        <div class="summary-item">
+
+                            <span class="label">Dominant Class</span>
+
+                            <span class="value moderate">
+                                Moderate Risk
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">Highest Percentage</span>
+
+                            <span class="value">
+                                75.08%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">High Risk</span>
+
+                            <span class="value">
+                                12.68%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">Very High Risk</span>
+
+                            <span class="value">
+                                6.39%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">Total Pixels</span>
+
+                            <span class="value">
+                                26382
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT PANEL -->
+
+            <div class="right-panel">
+
+                <h3>Description</h3>
+
+                <p>
+                    Based on the GIS Weighted Overlay Analysis, Hulu Selangor District
+                    is predominantly classified as <strong>Moderate Flood Risk</strong>,
+                    covering approximately <strong>75.08%</strong> of the total analysed
+                    area. High Flood Risk represents <strong>12.68%</strong>, while
+                    Very High Flood Risk accounts for <strong>6.39%</strong>. Low Flood
+                    Risk covers <strong>5.84%</strong> and Very Low Flood Risk represents
+                    only <strong>0.01%</strong> of the district.
+
+                    Moderate flood susceptibility is widely distributed throughout
+                    Hulu Selangor, whereas High and Very High Flood Risk zones are
+                    mainly concentrated near major rivers, floodplains and low-lying
+                    settlements where prolonged rainfall and river overflow increase
+                    the likelihood of flooding.
+                </p>
+
+                <h3>Scientific Justification</h3>
+
+                <p>
+                    Flood susceptibility was evaluated using a GIS Weighted Overlay
+                    Analysis by integrating four conditioning factors including
+                    rainfall, slope, soil type and distance to river. Each factor
+                    was assigned an appropriate weight based on its contribution
+                    to flood occurrence. The combined weighted values were classified
+                    into five flood susceptibility classes to represent spatial
+                    variations in flood risk across Hulu Selangor District and to
+                    support flood management planning.
+                </p>
+
+                <h3>Evidence</h3>
+
+                <ul class="evidence">
+
+                    <li>Moderate Flood Risk is the dominant class, covering approximately 75.08% of Hulu Selangor District.</li>
+
+                    <li>High Flood Risk occupies 12.68% and is mainly distributed near river corridors and floodplains.</li>
+
+                    <li>Very High Flood Risk represents 6.39% of the study area and is concentrated within highly flood-prone locations.</li>
+
+                    <li>Low Flood Risk accounts for 5.84%, while Very Low Flood Risk occupies only 0.01% of the district.</li>
+
+                    <li>The GIS Weighted Overlay Analysis effectively identifies spatial flood susceptibility patterns across Hulu Selangor District.</li>
+
+                </ul>
+
+                <h3>Reference</h3>
+
+                <p>
+                    Tehrany, M.S., Pradhan, B. &amp; Jebur, M.N. (2015).
+                </p>
+
+                <div class="analysis-buttons">
+
+                    <button
+                        class="map-btn"
+                        onclick="openDistrictMap('hulu_selangor')">
+
+                        🗺 View Flood Risk Map
+
+                    </button>
+
+                    <button
+                        class="back-btn"
+                        onclick="hideFlood(this)">
+
+                        ← Back to Overview
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================================================= -->
+<!-- KUALA LANGAT -->
+<!-- ================================================= -->
+
+<div class="district-wrapper">
+
+    <h2 class="district-heading">
+        📍 Kuala Langat District
+    </h2>
+
+    <!-- ================= OVERVIEW ================= -->
+
+    <div class="district-card overview-card">
+
+        <div class="district-image">
+            <img src="../data/district/kuala_langat.png" alt="Kuala Langat District">
+        </div>
+
+        <div class="district-content">
+
+            <span class="badge moderate">
+                Moderate Risk
+            </span>
+
+            <h2>Kuala Langat District Overview</h2>
+
+            <p>
+                Kuala Langat District is located in the southern part of Selangor and
+                is characterised by coastal plains, agricultural land, mangrove
+                forests and expanding residential developments. The district is
+                influenced by river systems and seasonal monsoon rainfall, which
+                contribute to flood susceptibility in several low-lying areas.
+            </p>
+
+            <button class="next-btn" onclick="showFlood(this)">
+                View Flood Risk Analysis →
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FLOOD ANALYSIS ================= -->
+
+    <div class="district-card flood-card">
+
+        <h2 class="analysis-title">
+
+            Flood Risk Analysis - Kuala Langat District
+
+        </h2>
+
+        <div class="analysis-layout">
+
+            <!-- LEFT PANEL -->
+
+            <div class="left-panel">
+
+                <div class="summary-card">
+
+                    <h3>📊 Flood Risk Distribution</h3>
+
+                    <div class="chart-container">
+
+                        <canvas id="kualaLangatChart"></canvas>
+
+                    </div>
+
+                    <div class="summary-info">
+
+                        <div class="summary-item">
+
+                            <span class="label">Dominant Class</span>
+
+                            <span class="value moderate">
+                                Moderate Risk
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">Highest Percentage</span>
+
+                            <span class="value">
+                                95.72%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">Low Risk</span>
+
+                            <span class="value">
+                                3.74%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">High Risk</span>
+
+                            <span class="value">
+                                0.54%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">Total Pixels</span>
+
+                            <span class="value">
+                                12082
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT PANEL -->
+
+            <div class="right-panel">
+
+                <h3>Description</h3>
+
+                <p>
+                    Based on the GIS Weighted Overlay Analysis, Kuala Langat District
+                    is predominantly classified as <strong>Moderate Flood Risk</strong>,
+                    accounting for approximately <strong>95.72%</strong> of the total
+                    analysed area. Areas classified as
+                    <strong>Low Flood Risk</strong> represent
+                    <strong>3.74%</strong>, while
+                    <strong>High Flood Risk</strong> accounts for only
+                    <strong>0.54%</strong>. No areas were classified as Very High
+                    Flood Risk or Very Low Flood Risk.
+
+                    The dominance of Moderate Flood Risk reflects the district's
+                    extensive low-lying terrain, river systems and seasonal rainfall.
+                    Localised High Flood Risk zones are primarily concentrated near
+                    river corridors and drainage channels where flood occurrence is
+                    more likely during prolonged or intense rainfall events.
+                </p>
+
+                <h3>Scientific Justification</h3>
+
+                <p>
+                    Flood susceptibility was evaluated using a GIS Weighted Overlay
+                    Analysis by integrating four conditioning factors including
+                    rainfall, slope, soil type and distance to river. Each factor
+                    was assigned an appropriate weight according to its contribution
+                    to flood occurrence. The combined weighted values were
+                    subsequently classified into five flood susceptibility
+                    categories: Very Low, Low, Moderate, High and Very High Flood
+                    Risk. This approach provides a reliable spatial representation
+                    of flood susceptibility throughout Kuala Langat District.
+                </p>
+
+                <h3>Evidence</h3>
+
+                <ul class="evidence">
+
+                    <li>Moderate Flood Risk is the dominant class, covering approximately 95.72% of Kuala Langat District.</li>
+
+                    <li>Low Flood Risk represents 3.74% and is generally located in areas with more favourable topographic conditions.</li>
+
+                    <li>High Flood Risk occupies only 0.54% and is mainly concentrated near river channels.</li>
+
+                    <li>No Very High Flood Risk or Very Low Flood Risk areas were identified.</li>
+
+                    <li>The GIS Weighted Overlay Analysis effectively identifies spatial flood susceptibility across Kuala Langat District.</li>
+
+                </ul>
+
+                <h3>Reference</h3>
+
+                <p>
+                    Tehrany, M.S., Pradhan, B. &amp; Jebur, M.N. (2015).
+                </p>
+
+                <div class="analysis-buttons">
+
+                    <button
+                        class="map-btn"
+                        onclick="openDistrictMap('kuala_langat')">
+
+                        🗺 View Flood Risk Map
+
+                    </button>
+
+                    <button
+                        class="back-btn"
+                        onclick="hideFlood(this)">
+
+                        ← Back to Overview
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================================================= -->
+<!-- KUALA SELANGOR -->
+<!-- ================================================= -->
+
+<div class="district-wrapper">
+
+    <h2 class="district-heading">
+        📍 Kuala Selangor District
+    </h2>
+
+    <!-- ================= OVERVIEW ================= -->
+
+    <div class="district-card overview-card">
+
+        <div class="district-image">
+            <img src="../data/district/kuala_selangor.png" alt="Kuala Selangor District">
+        </div>
+
+        <div class="district-content">
+
+            <span class="badge moderate">
+                Moderate Risk
+            </span>
+
+            <h2>Kuala Selangor District Overview</h2>
+
+            <p>
+                Kuala Selangor District is located along the north-western coast of
+                Selangor and is characterised by extensive low-lying plains,
+                agricultural land and river networks. The district is highly
+                influenced by river overflow and seasonal monsoon rainfall, making
+                several areas susceptible to flooding.
+            </p>
+
+            <button class="next-btn" onclick="showFlood(this)">
+                View Flood Risk Analysis →
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FLOOD ANALYSIS ================= -->
+
+    <div class="district-card flood-card">
+
+        <h2 class="analysis-title">
+
+            Flood Risk Analysis - Kuala Selangor District
+
+        </h2>
+
+        <div class="analysis-layout">
+
+            <!-- LEFT PANEL -->
+
+            <div class="left-panel">
+
+                <div class="summary-card">
+
+                    <h3>📊 Flood Risk Distribution</h3>
+
+                    <div class="chart-container">
+
+                        <canvas id="kualaSelangorChart"></canvas>
+
+                    </div>
+
+                    <div class="summary-info">
+
+                        <div class="summary-item">
+
+                            <span class="label">Dominant Class</span>
+
+                            <span class="value moderate">
+                                Moderate Risk
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">Highest Percentage</span>
+
+                            <span class="value">
+                                80.64%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">High Risk</span>
+
+                            <span class="value">
+                                18.42%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">Very High Risk</span>
+
+                            <span class="value">
+                                11.58%
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">Total Pixels</span>
+
+                            <span class="value">
+                                16255
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT PANEL -->
+
+            <div class="right-panel">
+
+                <h3>Description</h3>
+
+                <p>
+                    Based on the GIS Weighted Overlay Analysis, Kuala Selangor
+                    District is predominantly classified as
+                    <strong>Moderate Flood Risk</strong>, accounting for
+                    approximately <strong>80.64%</strong> of the total analysed
+                    area. Areas classified as <strong>High Flood Risk</strong>
+                    represent <strong>18.42%</strong>, while
+                    <strong>Very High Flood Risk</strong> accounts for
+                    <strong>11.58%</strong>. Low Flood Risk occupies only
+                    <strong>1.24%</strong> of the district, whereas no areas were
+                    classified as Very Low Flood Risk.
+
+                    The extensive distribution of Moderate Flood Risk reflects the
+                    district's low elevation, dense river network and frequent
+                    exposure to seasonal rainfall. High and Very High Flood Risk
+                    zones are primarily concentrated near river channels and
+                    floodplain areas where prolonged rainfall and river overflow
+                    significantly increase flood susceptibility.
+                </p>
+
+                <h3>Scientific Justification</h3>
+
+                <p>
+                    Flood susceptibility was assessed using a GIS Weighted Overlay
+                    Analysis by integrating four conditioning factors including
+                    rainfall, slope, soil type and distance to river. Each factor
+                    was assigned a relative weight according to its contribution
+                    to flood occurrence.
+
+                    The combined weighted values were subsequently classified into
+                    five flood susceptibility categories: Very Low, Low,
+                    Moderate, High and Very High Flood Risk. This GIS-based
+                    assessment provides a reliable representation of spatial flood
+                    susceptibility and supports flood risk management within
+                    Kuala Selangor District.
+                </p>
+
+                <h3>Evidence</h3>
+
+                <ul class="evidence">
+
+                    <li>Moderate Flood Risk is the dominant class, covering approximately 80.64% of Kuala Selangor District.</li>
+
+                    <li>High Flood Risk represents 18.42% and is mainly concentrated near river corridors and floodplain areas.</li>
+
+                    <li>Very High Flood Risk occupies 11.58% of the district and is associated with low-lying areas adjacent to major rivers.</li>
+
+                    <li>Low Flood Risk accounts for only 1.24%, while no Very Low Flood Risk areas were identified.</li>
+
+                    <li>The GIS Weighted Overlay Analysis effectively identifies spatial flood susceptibility patterns across Kuala Selangor District.</li>
+
+                </ul>
+
+                <h3>Reference</h3>
+
+                <p>
+                    Tehrany, M.S., Pradhan, B. &amp; Jebur, M.N. (2015).
+                </p>
+
+                <div class="analysis-buttons">
+
+                    <button
+                        class="map-btn"
+                        onclick="openDistrictMap('kuala_selangor')">
+
+                        🗺 View Flood Risk Map
+
+                    </button>
+
+                    <button
+                        class="back-btn"
+                        onclick="hideFlood(this)">
+
+                        ← Back to Overview
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================================================= -->
+<!-- SEPANG -->
+<!-- ================================================= -->
+
+<div class="district-wrapper">
+
+    <h2 class="district-heading">
+        📍 Sepang District
+    </h2>
+
+    <!-- ================= OVERVIEW ================= -->
+
+    <div class="district-card overview-card">
+
+        <div class="district-image">
+
+            <img src="../data/district/sepang.png" alt="Sepang District">
+
+        </div>
+
+        <div class="district-content">
+
+            <span class="badge moderate">
+                Moderate Risk
+            </span>
+
+            <h2>Sepang District Overview</h2>
+
+            <p>
+                Sepang District is located in the southern part of Selangor and is well known for Kuala Lumpur International Airport (KLIA), Sepang International Circuit and rapidly expanding residential and industrial developments. The district contains extensive lowland areas and river networks, making certain locations susceptible to flooding during prolonged rainfall events.
+            </p>
+
+            <button class="next-btn" onclick="showFlood(this)">
+                View Flood Risk Analysis →
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- ================= FLOOD ANALYSIS ================= -->
+
+    <div class="district-card flood-card">
+
+        <h2 class="analysis-title">
+
+            Flood Risk Analysis - Sepang District
+
+        </h2>
+
+        <div class="analysis-layout">
+
+            <!-- LEFT PANEL -->
+
+            <div class="left-panel">
+
+                <div class="summary-card">
+
+                    <h3>
+                        📊 Flood Risk Distribution
+                    </h3>
+
+                    <div class="chart-container">
+
+                        <canvas id="sepangChart"></canvas>
+
+                    </div>
+
+                    <div class="summary-info">
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Dominant Class
+                            </span>
+
+                            <span class="value moderate">
+
+                                Moderate Risk
+
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Highest Percentage
+                            </span>
+
+                            <span class="value">
+
+                                98.22%
+
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Moderate Risk
+                            </span>
+
+                            <span class="value">
+
+                                98.22%
+
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                High Risk
+                            </span>
+
+                            <span class="value">
+
+                                1.19%
+
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Low Risk
+                            </span>
+
+                            <span class="value">
+
+                                0.57%
+
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Very Low Risk
+                            </span>
+
+                            <span class="value">
+
+                                0.01%
+
+                            </span>
+
+                        </div>
+
+                        <div class="summary-item">
+
+                            <span class="label">
+                                Total Pixels
+                            </span>
+
+                            <span class="value">
+
+                                7378
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT PANEL -->
+
+            <div class="right-panel">
+
+                <h3>Description</h3>
+
+                <p>
+
+                    Based on the GIS Weighted Overlay Analysis, Sepang District is predominantly classified as
+                    <strong>Moderate Flood Risk</strong>, accounting for approximately
+                    <strong>98.22%</strong> of the analysed area. Only
+                    <strong>1.19%</strong> of the district falls within the
+                    <strong>High Flood Risk</strong> category, while
+                    <strong>Low Flood Risk</strong> represents
+                    <strong>0.57%</strong> and
+                    <strong>Very Low Flood Risk</strong> accounts for only
+                    <strong>0.01%</strong>.
+                    No areas were classified as
+                    <strong>Very High Flood Risk</strong>.
+
+                </p>
+
+                <p>
+
+                    The predominance of Moderate Flood Risk indicates that most parts of Sepang possess a moderate susceptibility to flooding. Areas exhibiting High Flood Risk are generally associated with low-lying terrain, urban expansion, and locations situated close to rivers and drainage channels. Rainfall intensity, gentle topography and river proximity remain the primary factors influencing flood occurrence throughout the district.
+
+                </p>
+
+                <h3>Scientific Justification</h3>
+
+                <p>
+
+                    Flood susceptibility in Sepang District was assessed using a GIS Weighted Overlay Analysis by integrating four conditioning factors: rainfall, slope, soil type and distance to river. Each factor was assigned an appropriate weight based on its contribution to flood occurrence. The weighted overlay model subsequently classified flood susceptibility into five categories: Very Low, Low, Moderate, High and Very High Flood Risk. This approach provides a scientifically reliable method for identifying spatial variations in flood susceptibility and supports effective flood risk management within Sepang District.
+
+                </p>
+
+                <h3>Evidence</h3>
+
+                <ul class="evidence">
+
+                    <li>Moderate Flood Risk is the dominant class, covering approximately <strong>98.22%</strong> of Sepang District.</li>
+
+                    <li>High Flood Risk occupies only <strong>1.19%</strong> of the analysed area.</li>
+
+                    <li>Low Flood Risk represents <strong>0.57%</strong>, while Very Low Flood Risk accounts for only <strong>0.01%</strong>.</li>
+
+                    <li>No Very High Flood Risk zones were identified within Sepang District.</li>
+
+                    <li>The analysis indicates that rainfall intensity, relatively flat terrain and proximity to river systems are the major factors contributing to flood susceptibility across the district.</li>
+
+                </ul>
+
+                <h3>Reference</h3>
+
+                <p>
+
+                    Tehrany, M.S., Pradhan, B. &amp; Jebur, M.N. (2015). GIS-based flood susceptibility mapping using weighted overlay techniques for spatial flood risk assessment.
+
+                </p>
+
+                <!-- BUTTONS -->
+
+                <div class="analysis-buttons">
+
+                    <button
+                        class="map-btn"
+                        onclick="openDistrictMap('sepang')">
+
+                        🗺 View Flood Risk Map
+
+                    </button>
+
+                    <button
+                        class="back-btn"
+                        onclick="hideFlood(this)">
+
+                        ← Back to Overview
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+<script>
+
+function showFlood(button){
+
+    const overview = button.closest(".overview-card");
+    const flood = overview.nextElementSibling;
+
+    overview.style.display = "none";
+    flood.style.display = "flex";
+
+}
+
+function hideFlood(button){
+
+    const flood = button.closest(".flood-card");
+    const overview = flood.previousElementSibling;
+
+    flood.style.display = "none";
+    overview.style.display = "flex";
+
+}
+
+function openDistrictMap(district){
+
+    localStorage.setItem("district", district);
+
+    window.location.href = "map.html";
+
+}
+
+
+// FLOOD RISK CHART
+
+
+const riskData = {
+
+
+
+labels:[
+
+"Very High",
+
+"High",
+
+"Moderate",
+
+"Low",
+
+"Very Low"
+
+],
+
+
+
+
+datasets:[{
+
+
+label:"Flood Risk Percentage (%)",
+
+
+data:[
+
+0.77,
+
+12.37,
+
+39.13,
+
+47.38,
+
+0.35
+
+],
+
+
+
+
+backgroundColor:[
+
+"#FF0000",
+
+"#FFA500",
+
+"#FFFF00",
+
+"#7CFC00",
+
+"#00FF00"
+
+],
+
+
+
+borderColor:[
+
+"#ffffff",
+
+"#ffffff",
+
+"#ffffff",
+
+"#ffffff",
+
+"#ffffff"
+
+],
+
+
+borderWidth:2
+
+
+
+}]
+
+
+
+};
+
+
+
+
+new Chart(
+
+document.getElementById("riskChart"),
+
+
+{
+
+type:"doughnut",
+
+data:riskData,
+
+
+options:{
+
+
+responsive:true,
+
+
+plugins:{
+
+
+legend:{
+
+
+position:"right"
+
+
+}
+
+
+}
+
+
+
+}
+
+
+
+}
+
+);
+
+
+
+
+// SLOPE CHART
+
+
+
+
+const slopeData = {
+
+
+
+labels:[
+
+
+"Very High",
+
+"High",
+
+"Moderate",
+
+"Low",
+
+"Very Low"
+
+
+],
+
+
+
+
+datasets:[{
+
+
+label:"Slope Risk Percentage (%)",
+
+
+
+data:[
+
+
+0.01,
+
+0.02,
+
+0.05,
+
+0.54,
+
+99.43
+
+
+],
+
+
+
+
+backgroundColor:[
+
+
+"#FF0000",
+
+"#FFA500",
+
+"#FFFF00",
+
+"#7CFC00",
+
+"#00FF00"
+
+
+],
+
+
+
+
+borderColor:[
+
+"#ffffff",
+
+"#ffffff",
+
+"#ffffff",
+
+"#ffffff",
+
+"#ffffff"
+
+
+],
+
+
+
+borderWidth:2
+
+
+
+}]
+
+
+
+};
+
+
+
+new Chart(
+
+
+document.getElementById("slopeChart"),
+
+
+
+{
+
+
+type:"doughnut",
+
+
+data:slopeData,
+
+
+
+options:{
+
+
+responsive:true,
+
+
+plugins:{
+
+
+legend:{
+
+
+position:"right"
+
+
+}
+
+
+
+}
+
+
+}
+
+
+
+}
+
+);
+
+// ================= SOIL TYPE CHART =================
+
+const soilData = {
+
+    labels: [
+        "Clay",
+        "Fine Texture",
+        "Loam",
+        "Sand"
+    ],
+
+    datasets: [{
+
+        label: "Soil Type Percentage (%)",
+
+        data: [
+            25,
+            30,
+            20,
+            25
+        ],
+
+        backgroundColor: [
+            "#FF0000",
+            "#FFA500",
+            "#7CFC00",
+            "#00FF00"
+        ],
+
+        borderColor: [
+            "#ffffff",
+            "#ffffff",
+            "#ffffff",
+            "#ffffff"
+        ],
+
+        borderWidth: 2
+
+    }]
+};
+
+
+
+new Chart(
+
+    document.getElementById("soilChart"),
+
+    {
+
+        type: "doughnut",
+
+        data: soilData,
+
+        options: {
+
+            responsive: true,
+
+            plugins: {
+
+                legend: {
+
+                    position: "right"
+
+                },
+
+                tooltip: {
+
+                    callbacks: {
+
+                        label: function(context) {
+
+                            return context.label + ": " + context.raw + "%";
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+);
+
+// ================= DRAINAGE DISTANCE CHART =================
+
+const drainageData = {
+
+    labels:[
+        "Very High",
+        "High",
+        "Moderate",
+        "Low",
+        "Very Low"
+    ],
+
+    datasets:[{
+
+        label:"Drainage Distance Percentage (%)",
+
+        data:[
+            17.89,
+            14.97,
+            27.85,
+            34.72,
+            4.57
+        ],
+
+        backgroundColor:[
+            "#FF0000",
+            "#FFA500",
+            "#FFFF00",
+            "#7CFC00",
+            "#00FF00"
+        ],
+
+        borderColor:[
+            "#ffffff",
+            "#ffffff",
+            "#ffffff",
+            "#ffffff",
+            "#ffffff"
+        ],
+
+        borderWidth:2
+
+    }]
+
+};
+
+new Chart(document.getElementById("drainageChart"),{
+
+    type:"doughnut",
+
+    data:drainageData,
+
+    options:{
+
+        responsive:true,
+
+        plugins:{
+
+            legend:{
+                position:"right"
+            },
+
+            tooltip:{
+                callbacks:{
+                    label:function(context){
+                        return context.label + ": " + context.raw + "%";
+                    }
+                }
+            }
+
+        }
+
+    }
+
+});
+
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="../js/script.js"></script>
+
+</body>
+
+</html>
