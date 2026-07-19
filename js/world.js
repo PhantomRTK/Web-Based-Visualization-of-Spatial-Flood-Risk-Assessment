@@ -1,3 +1,5 @@
+const container = document.getElementById("news");
+
 const apiKey = "61d9205dc6277b7a1a03f77e7aec380";
 
 const url = `https://corsproxy.io/?https://gnews.io/api/v4/search?q=earthquake%20OR%20tsunami%20OR%20flood&lang=en&apikey=${apiKey}`;
