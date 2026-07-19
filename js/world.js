@@ -1,7 +1,9 @@
 const container = document.getElementById("news");
 
 // Replace this with your NEW API key
-const apiKey = "pub_178ae22144614fd1947df1dc43711665";
+const apiKey = "pub_0510d70ba8cb44f9b5a26525efadacc3";
+
+const keyword = "flood";
 
 // Disaster-related keywords
 const keyword = "flood OR earthquake OR landslide OR tsunami OR storm OR wildfire";
@@ -12,33 +14,38 @@ const apiUrl =
 
 async function loadNews() {
 
-    container.innerHTML = "<h3 style='text-align:center;'>Loading latest news...</h3>";
+    container.innerHTML = "<h3>Loading...</h3>";
 
     try {
 
+        console.log("API URL:", apiUrl);
+
         const response = await fetch(apiUrl);
 
-        const data = await response.json();
+        console.log("HTTP Status:", response.status);
 
-        console.log(data);
+        const text = await response.text();
 
-        if (data.status !== "success") {
-            container.innerHTML =
-                `<p style="text-align:center;color:red;">${data.results || "Unable to load news."}</p>`;
-            return;
-        }
+        console.log("Response:", text);
 
-        displayNews(data.results);
+        const data = JSON.parse(text);
 
-    } catch (error) {
+        console.log("Parsed:", data);
 
-        console.error(error);
-
-        container.innerHTML =
-            "<h3 style='text-align:center;color:red;'>Failed to connect to NewsData API.</h3>";
-    }
+        if (data.status === "success" && data.results && data.results.length > 0) {
+    displayNews(data.results);
+} else {
+    console.log(data);
+    container.innerHTML = "<h3>No news found.</h3>";
 }
 
+    } catch (err) {
+
+        console.error(err);
+
+        container.innerHTML = "<p>Fetch failed.</p>";
+    }
+}
 function displayNews(articles) {
 
     container.innerHTML = "";
