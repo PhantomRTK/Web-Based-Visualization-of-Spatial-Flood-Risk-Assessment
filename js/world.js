@@ -1,7 +1,7 @@
 const container = document.getElementById("news");
 
 // Your NewsData.io API Key
-const apiKey = "pub_0510d70ba8cb44f9b5a26525efadacc3";
+const apiKey = "pub_2ec3297d9cbe4960b1a2601084becb09";
 
 // Search keyword
 const keyword = "flood";
