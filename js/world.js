@@ -25,8 +25,10 @@ async function loadNews() {
 
                 await delay(1000); // ⏳ elak API block
 
+                const apiUrl = `https://gnews.io/api/v4/search?q=${encodeURIComponent(q)}&lang=en&max=10&page=${page}&sortby=publishedAt&apikey=${apiKey}`;
+
                 const res = await fetch(
-                    `https://gnews.io/api/v4/search?q=${q}&lang=en&max=10&page=${page}&sortby=publishedAt&apikey=${apiKey}`
+    `           https://corsproxy.io/?${encodeURIComponent(apiUrl)}`
                 );
 
                 const data = await res.json();
