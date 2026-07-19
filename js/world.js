@@ -1,61 +1,41 @@
 const container = document.getElementById("news");
 
-const apiKey = "61d9205dc6277b7a1a03f77e7aec380";
+// Replace this with your NEW API key
+const apiKey = "pub_178ae22144614fd1947df1dc43711665";
 
-const url = `https://corsproxy.io/?https://gnews.io/api/v4/search?q=earthquake%20OR%20tsunami%20OR%20flood&lang=en&apikey=${apiKey}`;
+// Disaster-related keywords
+const keyword = "flood OR earthquake OR landslide OR tsunami OR storm OR wildfire";
 
-let allArticles = [];
-
-// ✅ QUERY LIST (WAJIB ADA)
-const queries = [
-    "earthquake OR tsunami OR volcano",
-    "flood OR landslide OR storm",
-    "wildfire OR drought OR heatwave OR climate change"
-];
-
-// ✅ DELAY FUNCTION (ELAK 429)
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+// API URL
+const apiUrl =
+`https://newsdata.io/api/1/latest?apikey=${apiKey}&q=${encodeURIComponent(keyword)}&language=en&size=10`;
 
 async function loadNews() {
 
+    container.innerHTML = "<h3 style='text-align:center;'>Loading latest news...</h3>";
+
     try {
 
-        for (let q of queries) {
-            for (let page = 1; page <= 2; page++) {
+        const response = await fetch(apiUrl);
 
-                await delay(1000); // ⏳ elak API block
+        const data = await response.json();
 
-                const apiUrl = `https://gnews.io/api/v4/search?q=${encodeURIComponent(q)}&lang=en&max=10&page=${page}&sortby=publishedAt&apikey=${apiKey}`;
+        console.log(data);
 
-                const res = await fetch(
-    `           https://corsproxy.io/?${encodeURIComponent(apiUrl)}`
-                );
-
-                const data = await res.json();
-
-                // ✅ HANDLE LIMIT ERROR
-                if (data.errors) {
-                    console.log("API LIMIT:", data.errors);
-                    continue;
-                }
-
-                if (data.articles) {
-                    allArticles = allArticles.concat(data.articles);
-                }
-            }
+        if (data.status !== "success") {
+            container.innerHTML =
+                `<p style="text-align:center;color:red;">${data.results || "Unable to load news."}</p>`;
+            return;
         }
 
-        // ✅ BUANG DUPLICATE
-        const uniqueNews = removeDuplicates(allArticles);
+        displayNews(data.results);
 
-        // ✅ PAPAR SEKALI SAHAJA
-        displayNews(uniqueNews);
+    } catch (error) {
 
-    } catch (err) {
-        console.log("ERROR:", err);
-        container.innerHTML = "<p>Failed to load news</p>";
+        console.error(error);
+
+        container.innerHTML =
+            "<h3 style='text-align:center;color:red;'>Failed to connect to NewsData API.</h3>";
     }
 }
 
@@ -63,51 +43,53 @@ function displayNews(articles) {
 
     container.innerHTML = "";
 
-    if (articles.length === 0) {
-        container.innerHTML = "<p>No disaster news found</p>";
+    if (!articles || articles.length === 0) {
+
+        container.innerHTML =
+            "<h3 style='text-align:center;'>No disaster news found.</h3>";
+
         return;
     }
 
     articles.forEach(article => {
 
-        const title = article.title;
-        const desc = article.description || "No description";
-        const link = article.url;
-        const image = article.image || "https://via.placeholder.com/600x400";
+        const image =
+            article.image_url ||
+            "https://via.placeholder.com/600x350?text=No+Image";
 
-        const news = `
-            <div class="news-block">
-                <img src="${image}" 
-                     onerror="this.src='https://via.placeholder.com/600x400'">
-                
-                <div class="news-text">
-                    <h2>${title}</h2>
-                    <p>${desc}</p>
-                    <a href="${link}" target="_blank">Read Full Story →</a>
-                </div>
+        const title =
+            article.title || "No title";
+
+        const description =
+            article.description || "No description available.";
+
+        const link =
+            article.link || "#";
+
+        container.innerHTML += `
+
+        <div class="news-block">
+
+            <img src="${image}"
+                 onerror="this.src='https://via.placeholder.com/600x350?text=No+Image'">
+
+            <div class="news-text">
+
+                <h2>${title}</h2>
+
+                <p>${description}</p>
+
+                <a href="${link}" target="_blank">
+                    Read Full Story →
+                </a>
+
             </div>
+
+        </div>
+
         `;
-
-        container.innerHTML += news;
     });
+
 }
 
-function removeDuplicates(articles) {
-    const seen = new Set();
-
-    return articles.filter(article => {
-
-        const cleanTitle = article.title
-            .toLowerCase()
-            .replace(/[^a-z0-9 ]/g, "")
-            .trim();
-
-        if (seen.has(cleanTitle)) return false;
-
-        seen.add(cleanTitle);
-        return true;
-    });
-}
-
-// RUN
 loadNews();
