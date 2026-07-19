@@ -1,12 +1,10 @@
 const container = document.getElementById("news");
 
-// Replace this with your NEW API key
+// Your NewsData.io API Key
 const apiKey = "pub_0510d70ba8cb44f9b5a26525efadacc3";
 
+// Search keyword
 const keyword = "flood";
-
-// Disaster-related keywords
-const keyword = "flood OR earthquake OR landslide OR tsunami OR storm OR wildfire";
 
 // API URL
 const apiUrl =
@@ -14,7 +12,7 @@ const apiUrl =
 
 async function loadNews() {
 
-    container.innerHTML = "<h3>Loading...</h3>";
+    container.innerHTML = "<h3 style='text-align:center;'>Loading latest news...</h3>";
 
     try {
 
@@ -24,39 +22,54 @@ async function loadNews() {
 
         console.log("HTTP Status:", response.status);
 
-        const text = await response.text();
+        const data = await response.json();
 
-        console.log("Response:", text);
+        console.log("API Response:", data);
 
-        const data = JSON.parse(text);
+        // Handle API errors
+        if (!response.ok || data.status !== "success") {
 
-        console.log("Parsed:", data);
+            let message = "Unable to load news.";
 
-        if (data.status === "success" && data.results && data.results.length > 0) {
-    displayNews(data.results);
-} else {
-    console.log(data);
-    container.innerHTML = "<h3>No news found.</h3>";
-}
+            if (data.results && data.results.message) {
+                message = data.results.message;
+            }
 
-    } catch (err) {
+            container.innerHTML = `
+                <div style="text-align:center;color:red;padding:20px;">
+                    <h3>${message}</h3>
+                </div>
+            `;
 
-        console.error(err);
+            return;
+        }
 
-        container.innerHTML = "<p>Fetch failed.</p>";
+        if (!data.results || data.results.length === 0) {
+
+            container.innerHTML =
+                "<h3 style='text-align:center;'>No disaster news found.</h3>";
+
+            return;
+        }
+
+        displayNews(data.results);
+
+    }
+    catch (error) {
+
+        console.error(error);
+
+        container.innerHTML = `
+            <div style="text-align:center;color:red;padding:20px;">
+                <h3>Failed to connect to NewsData API.</h3>
+            </div>
+        `;
     }
 }
+
 function displayNews(articles) {
 
     container.innerHTML = "";
-
-    if (!articles || articles.length === 0) {
-
-        container.innerHTML =
-            "<h3 style='text-align:center;'>No disaster news found.</h3>";
-
-        return;
-    }
 
     articles.forEach(article => {
 
@@ -73,30 +86,38 @@ function displayNews(articles) {
         const link =
             article.link || "#";
 
+        const source =
+            article.source_name || "Unknown Source";
+
+        const date =
+            article.pubDate || "";
+
         container.innerHTML += `
+            <div class="news-block">
 
-        <div class="news-block">
+                <img
+                    src="${image}"
+                    onerror="this.src='https://via.placeholder.com/600x350?text=No+Image'">
 
-            <img src="${image}"
-                 onerror="this.src='https://via.placeholder.com/600x350?text=No+Image'">
+                <div class="news-text">
 
-            <div class="news-text">
+                    <h2>${title}</h2>
 
-                <h2>${title}</h2>
+                    <small>
+                        <strong>${source}</strong> • ${date}
+                    </small>
 
-                <p>${description}</p>
+                    <p>${description}</p>
 
-                <a href="${link}" target="_blank">
-                    Read Full Story →
-                </a>
+                    <a href="${link}" target="_blank">
+                        Read Full Story →
+                    </a>
+
+                </div>
 
             </div>
-
-        </div>
-
         `;
     });
-
 }
 
 loadNews();
